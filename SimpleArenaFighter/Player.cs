@@ -6,7 +6,7 @@ namespace SimpleArenaFighter
 {
     class Player : Character
     {
-        public void GeneratePlayer()
+        public Player()
         {
         }
     }

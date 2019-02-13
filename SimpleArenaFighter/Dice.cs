@@ -15,6 +15,5 @@ namespace SimpleArenaFighter
             diceRoll = iGen.Next(1, 6);
             return diceRoll;
         }
-
     }
 }

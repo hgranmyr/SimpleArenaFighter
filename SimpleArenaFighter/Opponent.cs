@@ -8,8 +8,9 @@ namespace SimpleArenaFighter
     class Opponent : Character
     {
         InfoGenerator iGen = new InfoGenerator();
-        public void GenerateOpponent()
+        public Opponent(string name)
         {
+         
         }
     }
 }

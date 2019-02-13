@@ -11,11 +11,11 @@ namespace SimpleArenaFighter
         static InfoGenerator infoGen = new InfoGenerator();
 
         public string Name { get; set; }
-        public int Health = infoGen.Next(1,10);
-        public int Strength = infoGen.Next(1,10);
-        public int Damage = infoGen.Next(1,10);
+        public int hp = infoGen.Next(1, 10);
+        public int str = infoGen.Next(1, 10);
+        public int dmg = infoGen.Next(1, 10);
 
-        public void CreateGladiator()
+        public Character()
         {
         }
     }

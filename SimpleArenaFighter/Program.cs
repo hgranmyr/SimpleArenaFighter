@@ -10,27 +10,30 @@ namespace SimpleArenaFighter
         {
             Player player = new Player();
             Dice dice = new Dice();
-            Opponent opponent = new Opponent();
             InfoGenerator iGen = new InfoGenerator();
             Battle fight = new Battle();
             Round turn = new Round();
+
 
             Console.WriteLine(
                 "Welcome to arena fighter!\n" +
                 "Enter a name for your gladiator:"
                 );
 
+            Opponent CreateOpponent()
+            {
+                return new Opponent(iGen.NextFirstName());
+            }
             player.Name = Console.ReadLine();
-            opponent.Name = iGen.NextFirstName();
 
             Console.Clear();
 
             Console.WriteLine(
                " --- Player ---\n"+
                " Name: " + player.Name + "\n"+
-               " Health: " + player.Health + "\n"+
-               " Strenght: " + player.Strength + "\n"+
-               " Damgage:" + player.Damage
+               " Health: " + player.hp + "\n"+
+               " Strenght: " + player.str + "\n"+
+               " Damgage:" + player.dmg
                 );
 
             bool keepAlive = true;
@@ -51,6 +54,7 @@ namespace SimpleArenaFighter
                         break;
                     case 2:
                         Retire();
+                        keepAlive = false;
                         break;
                     default:
                         Console.WriteLine("Not a valid selection.");
@@ -59,6 +63,8 @@ namespace SimpleArenaFighter
 
                 void Fight()
                 {
+                    Opponent opponent = new Opponent();
+
                     Console.Clear();
                     Console.WriteLine(
                        "\n --- Player ---\n" +
