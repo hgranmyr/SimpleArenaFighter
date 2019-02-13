@@ -15,9 +15,8 @@ namespace SimpleArenaFighter
         public int Strength = infoGen.Next(1,10);
         public int Damage = infoGen.Next(1,10);
 
-        public void CreateGladiator(string Name, int Health, int Strength, int Damage)
+        public void CreateGladiator()
         {
-
         }
     }
 }

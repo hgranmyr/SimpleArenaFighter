@@ -5,7 +5,11 @@ using System.Text;
 
 namespace SimpleArenaFighter
 {
-    class Battle
+    class Opponent : Character
     {
+        InfoGenerator iGen = new InfoGenerator();
+        public void GenerateOpponent()
+        {
+        }
     }
 }
