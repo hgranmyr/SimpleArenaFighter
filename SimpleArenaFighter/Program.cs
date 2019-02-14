@@ -8,138 +8,186 @@ namespace SimpleArenaFighter
     {
         static void Main(string[] args)
         {
-            Player player = new Player();
-            Dice dice = new Dice();
+
+            Round dice = new Round();
             InfoGenerator iGen = new InfoGenerator();
-            Battle fight = new Battle();
-            Round turn = new Round();
+            Battle battle = new Battle();
+            List<Opponent> defeated = new List<Opponent>();
+
+
+            Player CreatePlayer()
+            {
+                return new Player(Console.ReadLine(), iGen.Next(1, 6), iGen.Next(1, 6), iGen.Next(1, 6));
+            }
+
+            Opponent GenerateOpponent()
+            {
+                return new Opponent(iGen.NextFirstName(), iGen.Next(1, 6), iGen.Next(1, 6), iGen.Next(1, 6));
+            }
 
 
             Console.WriteLine(
                 "Welcome to arena fighter!\n" +
                 "Enter a name for your gladiator:"
                 );
+            Player player = CreatePlayer();
 
-            Opponent CreateOpponent()
-            {
-                return new Opponent(iGen.NextFirstName());
-            }
-            player.Name = Console.ReadLine();
 
-            Console.Clear();
 
-            Console.WriteLine(
-               " --- Player ---\n"+
-               " Name: " + player.Name + "\n"+
-               " Health: " + player.hp + "\n"+
-               " Strenght: " + player.str + "\n"+
-               " Damgage:" + player.dmg
-                );
 
             bool keepAlive = true;
             while (keepAlive)
             {
+                Console.Clear();
+                Console.WriteLine(
+                   " --- Player ---\n" +
+                   " Name: " + player.name + "\n" +
+                   " Health: " + player.hp + "\n" +
+                   " Strenght: " + player.str + "\n" +
+                   " Damgage:" + player.dmg
+                   );
+
                 Console.WriteLine(
                     "\n\n" +
                     " What do you want to do?\n" +
-                    " 1: Fight\n" +
-                    " 2: Retire"
+                    " F : Fight\n" +
+                    " R : Retire"
                     );
-                int selection = int.Parse(Console.ReadLine());
+                ConsoleKeyInfo consoleKey = Console.ReadKey(true);
+                string selection = consoleKey.Key.ToString();
 
-                switch (selection)
+                if (selection == "F")
                 {
-                    case 1:
-                        Fight();
-                        break;
-                    case 2:
-                        Retire();
-                        keepAlive = false;
-                        break;
-                    default:
-                        Console.WriteLine("Not a valid selection.");
-                        break;
+                    Fight();
+                }
+                else if (selection == "R")
+                {
+                    Retire();
+                    keepAlive = false;
+                }
+                else
+                {
+                    Console.WriteLine("Not a valid selection.");
+                    Console.ReadKey(true);
                 }
 
-                void Fight()
+            }
+
+
+            void Fight()
+            {
+                Opponent opponent = GenerateOpponent();
+
+                Console.Clear();
+                Console.WriteLine(
+                   "\n --- Player ---\n" +
+                   " Name: " + player.name + "\n" +
+                   " Health: " + player.hp + "\n" +
+                   " Strenght: " + player.str + "\n" +
+                   " Damgage:" + player.dmg
+                    );
+                Console.WriteLine(
+                   "\n --- Opponent ---\n" +
+                   " Name: " + opponent.name + "\n" +
+                   " Health: " + opponent.hp + "\n" +
+                   " Strenght: " + opponent.str + "\n" +
+                   " Damgage:" + opponent.dmg
+                    );
+                Console.ReadKey(true);
+                Console.Clear();
+
+                while (player.hp > 0 && opponent.hp > 0)
                 {
-                    Opponent opponent = new Opponent();
 
-                    Console.Clear();
+                    dice.RollDice();
+                    int playerRoll = dice.diceRoll;
+                    int pValue = player.str + playerRoll;
+
+                    dice.RollDice();
+                    int opponentRoll = dice.diceRoll;
+                    int oValue = opponent.str + opponentRoll;
+
+                    Console.WriteLine("\n--------------------");
+                    Console.WriteLine("Rolls:\n" + player.name + " " + playerRoll + " vs " + opponent.name + " " + opponentRoll);
                     Console.WriteLine(
-                       "\n --- Player ---\n" +
-                       " Name: " + player.Name + "\n" +
-                       " Health: " + player.Health + "\n" +
-                       " Strenght: " + player.Strength + "\n" +
-                       " Damgage:" + player.Damage
-                        );
-                    Console.WriteLine(
-                       "\n --- Opponent ---\n" +
-                       " Name: " + opponent.Name + "\n" +
-                       " Health: " + opponent.Health + "\n" +
-                       " Strenght: " + opponent.Strength + "\n" +
-                       " Damgage:" + opponent.Damage
-                        );
+                           "\n\n" +
+                           player.name + ": " + player.str + " + " + playerRoll + "(" + pValue + ")" + "\n" +
+                           opponent.name + ": " + opponent.str + " + " + opponentRoll + "(" + oValue + ")"
+                           );
                     Console.ReadKey(true);
-                    Console.Clear();
-
-                    while (player.Health > 0 && opponent.Health > 0)
+                    if (pValue > oValue)
                     {
-
-                        dice.RollDice();
-                        int playerRoll = dice.diceRoll;
-                        dice.RollDice();
-                        int opponentRoll = dice.diceRoll;
-                        Console.WriteLine("Rolls:\n" + player.Name + " " + playerRoll + " vs " + opponent.Name + " " + opponentRoll);
-                        Console.WriteLine(
-                               "\n\n" +
-                               player.Name + ": " + player.Strength + " + " + playerRoll + "\n" +
-                               opponent.Name + ": " + opponent.Strength + " + " + opponentRoll
-                               );
+                        Console.WriteLine("\n--------------------");
+                        Console.WriteLine(player.name + " attack " + opponent.name + ", " + opponent.name + " takes " + player.dmg + " damage!");
+                        opponent.hp = opponent.hp - player.dmg;
+                        Console.WriteLine(opponent.name + " " + opponent.hp);
                         Console.ReadKey(true);
-                        if (player.Strength > opponent.Strength)
-                        {
-                            Console.WriteLine("\n--------------------");
-                            Console.WriteLine(player.Name + " attack " + opponent.Name + ", " + opponent.Name + " takes " + player.Damage + " damage!");
-                            opponent.Health = opponent.Health - player.Damage;
-                            Console.WriteLine(opponent.Name + " " + opponent.Health);
-                            Console.ReadKey(true);
-                        }
-                        else if (opponent.Strength > player.Strength)
-                        {
-                            Console.WriteLine("\n--------------------");
-                            Console.WriteLine(opponent.Name + " attack " + player.Name + ", " + player.Name + " takes " + opponent.Damage + " damage!");
-                            player.Health = player.Health - opponent.Damage;
-                            Console.WriteLine(player.Name + " " + player.Health);
-                            Console.ReadKey(true);
-                        }
-                        else
-                        {
-                            break;
-                        }
                     }
-                    if (player.Health <= 0)
+                    else if (oValue > pValue)
                     {
-                        Console.WriteLine("You have died.\n Game over.");
+                        Console.WriteLine("\n--------------------");
+                        Console.WriteLine(opponent.name + " attack " + player.name + ", " + player.name + " takes " + opponent.dmg + " damage!");
+                        player.hp = player.hp - opponent.hp;
+                        Console.WriteLine(player.name + " " + player.hp);
                         Console.ReadKey(true);
-
                     }
-                    else if (opponent.Health <= 0)
+                    else if (pValue == oValue)
                     {
-                        Console.WriteLine(player.Name + " has defeated " + opponent.Name);
-                        Console.ReadKey(true);
-
+                        Console.WriteLine("The players circle each other without attacking.");
                     }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (player.hp <= 0)
+                {
+                    Console.WriteLine("You have died.\n Game over.");
+                    Console.ReadKey(true);
+                    keepAlive = false;
+                    Retire();
+                }
+                else if (opponent.hp <= 0)
+                {
+                    defeated.Add(opponent);
+                    Console.WriteLine(player.name + " has defeated " + opponent.name);
+                    Console.ReadKey(true);
+
                 }
             }
 
             void Retire()
             {
+                Console.Clear();
+                int count = 0;
+                int score = 0;
 
+                foreach (var opponent in defeated)
+                {
+                    count++;
+                    string victory = count + ": " + opponent.name;
+
+                    battle.AddFight(victory);
+                }
+
+                foreach (var item in battle.log)
+                {
+                    score++;
+                }
+
+                Console.WriteLine(
+                    "Your score is: " + score + "\n"+
+                    "You have defeated the following gladiators: "
+                    );
+                foreach (var item in battle.log)
+                {
+                    Console.WriteLine(item + "\n");
+                }
+                Console.ReadKey(true);
             }
 
             Console.Clear();
-            Console.WriteLine("Bye!");
+            Console.WriteLine(" Thanks for using the software. \n Bye!");
 
 
             Console.ReadKey(true);

@@ -7,13 +7,12 @@ namespace SimpleArenaFighter
 {
     class Character
     {
+        public string name;
+        public int hp;
+        public int str;
+        public int dmg;
 
         static InfoGenerator infoGen = new InfoGenerator();
-
-        public string Name { get; set; }
-        public int hp = infoGen.Next(1, 10);
-        public int str = infoGen.Next(1, 10);
-        public int dmg = infoGen.Next(1, 10);
 
         public Character()
         {

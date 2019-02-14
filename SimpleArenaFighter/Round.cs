@@ -7,6 +7,13 @@ namespace SimpleArenaFighter
 {
     class Round
     {
+        public InfoGenerator iGen = new InfoGenerator();
+        public int diceRoll;
 
+        public int RollDice()
+        {
+            diceRoll = iGen.Next(1, 6);
+            return diceRoll;
+        }
     }
 }

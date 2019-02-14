@@ -7,10 +7,12 @@ namespace SimpleArenaFighter
 {
     class Opponent : Character
     {
-        InfoGenerator iGen = new InfoGenerator();
-        public Opponent(string name)
+        public Opponent(string name, int hp, int str, int dmg)
         {
-         
+            this.name = name;
+            this.hp = hp;
+            this.str = str;
+            this.dmg = dmg;
         }
     }
 }
